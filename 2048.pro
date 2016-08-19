@@ -13,9 +13,13 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    cell.cpp \
+    grid.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    cell.h \
+    grid.h
 
 RESOURCES += \
     2048.qrc

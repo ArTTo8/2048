@@ -1,7 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "grid.h"
 #include <QMainWindow>
+#include <QGridLayout>
 
 class MainWindow : public QMainWindow
 {

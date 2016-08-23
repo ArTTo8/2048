@@ -1,6 +1,5 @@
 #include "grid.h"
 #include <QKeyEvent>
-#include <QTime>
 
 Grid::Grid(QWidget *parent) :
     QWidget(parent)
@@ -28,103 +27,95 @@ Grid::Grid(QWidget *parent) :
 
 void Grid::keyPressEvent(QKeyEvent *event)
 {
-  switch (event->key()) {
-  case Qt::Key_Up:
-        moveUp();
-        break;
-  case Qt::Key_Down:
-        moveDown();
-        break;
-  case Qt::Key_Left:
-        moveLeft();
-        break;
-  case Qt::Key_Right:
-        moveRight();
-        break;
-  }
-}
-
-void Grid::moveUp()
-{
-    for (int col = 0; col < 5; col++)
-        for (int row = 0; row < 4; row++)
+    QList<int> notZero;
+    switch (event->key()) {
+    case Qt::Key_Up:
+        for (int col = 0; col < 5; col++)
         {
-            if (list[row][col]->getNumber() == list[row + 1][col]->getNumber())
+            for (int row = 0; row < 5; row++)
+                if (list[row][col]->getNumber() != 0)
+                    notZero.append(list[row][col]->getNumber());
+            notZero = move(notZero);
+
+            for (int row = 0; row < 5; row++)
             {
-                list[row][col]->setNumber(list[row][col]->getNumber() * 2);
+                if (!notZero.isEmpty())
+                    list[row][col]->setNumber(notZero.takeFirst());
+                else list[row][col]->setNumber(0);
             }
         }
-    addRandCell();
-}
-
-void Grid::moveDown()
-{
-    for (int col = 0; col < 5; col++)
-        for (int row = 0; row < 4; row++)
+        addRandCell();
+        break;
+    case Qt::Key_Down:
+        for (int col = 0; col < 5; col++)
         {
-            if (list[row][col]->getNumber() == list[row + 1][col]->getNumber())
+            for (int row = 4; row >= 0; row--)
+                if (list[row][col]->getNumber() != 0)
+                    notZero.append(list[row][col]->getNumber());
+            notZero = move(notZero);
+
+            for (int row = 4; row >= 0; row--)
             {
-                list[row][col]->setNumber(0);
-                list[row + 1][col]->setNumber(list[row + 1][col]->getNumber() * 2);
-                continue;
-            }
-            if (list[row + 1][col]->getNumber() == 0)
-            {
-                list[row + 1][col]->setNumber(list[row][col]->getNumber());
-                list[row][col]->setNumber(0);
-                continue;
+                if (!notZero.isEmpty())
+                    list[row][col]->setNumber(notZero.takeFirst());
+                else list[row][col]->setNumber(0);
             }
         }
-    addRandCell();
-}
-
-void Grid::moveLeft()
-{
-    for (int col = 4; col > 0; col--)
+        addRandCell();
+        break;
+    case Qt::Key_Left:
         for (int row = 0; row < 5; row++)
         {
-            if (list[row][col]->getNumber() == list[row][col - 1]->getNumber())
+            for (int col = 0; col < 5; col++)
+                if (list[row][col]->getNumber() != 0)
+                    notZero.append(list[row][col]->getNumber());
+            notZero = move(notZero);
+
+            for (int col = 0; col < 5; col++)
             {
-                list[row][col]->setNumber(0);
-                list[row][col - 1]->setNumber(list[row][col - 1]->getNumber() * 2);
-                continue;
-            }
-            if (list[row][col - 1]->getNumber() == 0)
-            {
-                list[row][col - 1]->setNumber(list[row][col]->getNumber());
-                list[row][col]->setNumber(0);
-                continue;
+                if (!notZero.isEmpty())
+                    list[row][col]->setNumber(notZero.takeFirst());
+                else list[row][col]->setNumber(0);
             }
         }
-    addRandCell();
-}
-
-void Grid::moveRight()
-{
-    for (int col = 0; col < 4; col++)
+        addRandCell();
+        break;
+    case Qt::Key_Right:
         for (int row = 0; row < 5; row++)
         {
-            if (list[row][col]->getNumber() == list[row][col + 1]->getNumber())
+            for (int col = 4; col >= 0; col--)
+                if (list[row][col]->getNumber() != 0)
+                    notZero.append(list[row][col]->getNumber());
+            notZero = move(notZero);
+
+            for (int col = 4; col >= 0; col--)
             {
-                list[row][col]->setNumber(0);
-                list[row][col + 1]->setNumber(list[row][col + 1]->getNumber() * 2);
-                continue;
-            }
-            if (list[row][col + 1]->getNumber() == 0)
-            {
-                list[row][col + 1]->setNumber(list[row][col]->getNumber());
-                list[row][col]->setNumber(0);
-                continue;
+                if (!notZero.isEmpty())
+                    list[row][col]->setNumber(notZero.takeFirst());
+                else list[row][col]->setNumber(0);
             }
         }
-    addRandCell();
+        addRandCell();
+        break;
+    }
+}
+
+QList<int> Grid::move(QList<int> list)
+{
+    for (int i = 0; i < list.count() - 1; i++)
+        if (list.at(i) == list.at(i + 1))
+        {
+            list[i] *= 2;
+            list.removeAt(i + 1);
+    }
+    return list;
 }
 
 void Grid::addRandCell()
 {
-    qsrand(QTime(0,0,0).msecsTo(QTime::currentTime()));
-    unsigned short int i = rand()%4;
-    unsigned short int j = rand()%4;
+    unsigned i = rand()%5;
+    unsigned j = rand()%5;
     if (list[i][j]->getNumber() == 0)
         list[i][j]->setNumber(2);
+    else addRandCell();
 }

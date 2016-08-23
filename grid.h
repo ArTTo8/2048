@@ -11,10 +11,7 @@ class Grid : public QWidget
     QGridLayout *lay;
 
 private:
-    void moveUp();
-    void moveDown();
-    void moveLeft();
-    void moveRight();
+    QList<int> move(QList<int> list);
     void addRandCell();
 
 protected:

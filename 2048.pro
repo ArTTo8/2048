@@ -20,6 +20,3 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     cell.h \
     grid.h
-
-RESOURCES += \
-    2048.qrc

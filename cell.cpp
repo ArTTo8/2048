@@ -1,84 +1,73 @@
 #include "cell.h"
 
+const QString mStyle = "font:20pt; font-weight:400; border-radius: 5px;";
+
 Cell::Cell(int row, int col, QWidget *parent) :
     QLabel(parent)
 {
-    resize(70, 70);
-    number = 0;
+    setMinimumSize(65, 65);
+    setAlignment(Qt::AlignCenter);
     coord = new Coords(row, col);
     setNumber(0);
 }
 
-void Cell::setNumber(unsigned short num)
+void Cell::setNumber(int num)
 {
-    QPixmap pix;
     switch (num) {
     case 0:
-        pix.load(":/sprites/base.png");
-        setPixmap(pix);
-        number = 0;
+        setStyleSheet(mStyle + "background-color: #cdc1b5; color: black;");
+        setText("");
         break;
     case 2:
-        pix.load(":/sprites/2.png");
-        setPixmap(pix);
-        number = 2;
+        setStyleSheet(mStyle + "background-color: #eee4da; color: black;");
+        setText(QString::number(num));
         break;
     case 4:
-        pix.load(":/sprites/4.png");
-        setPixmap(pix);
-        number = 4;
+        setStyleSheet(mStyle + "background-color: #eddfc4; color: black;");
+        setText(QString::number(num));
         break;
     case 8:
-        pix.load(":/sprites/8.png");
-        setPixmap(pix);
-        number = 8;
+        setStyleSheet(mStyle + "background-color: #f4b17a; color: white;");
+        setText(QString::number(num));
         break;
     case 16:
-        pix.load(":/sprites/16.png");
-        setPixmap(pix);
-        number = 16;
+        setStyleSheet(mStyle + "background-color: #f79663; color: white;");
+        setText(QString::number(num));
         break;
     case 32:
-        pix.load(":/sprites/32.png");
-        setPixmap(pix);
-        number = 32;
+        setStyleSheet(mStyle + "background-color: #f67d62; color: white;");
+        setText(QString::number(num));
         break;
     case 64:
-        pix.load(":/sprites/64.png");
-        setPixmap(pix);
-        number = 64;
+        setStyleSheet(mStyle + "background-color: #f65e39; color: white;");
+        setText(QString::number(num));
         break;
     case 128:
-        pix.load(":/sprites/128.png");
-        setPixmap(pix);
-        number = 128;
+        setStyleSheet(mStyle + "background-color: #edce73; color: white;");
+        setText(QString::number(num));
         break;
     case 256:
-        pix.load(":/sprites/256.png");
-        setPixmap(pix);
-        number = 256;
+        setStyleSheet(mStyle + "background-color: #e9cf58; color: white;");
+        setText(QString::number(num));
         break;
     case 512:
-        pix.load(":/sprites/512.png");
-        setPixmap(pix);
-        number = 512;
+        setStyleSheet(mStyle + "background-color: #edc651; color: white;");
+        setText(QString::number(num));
         break;
     case 1024:
-        pix.load(":/sprites/1024.png");
-        setPixmap(pix);
-        number = 1024;
+        setStyleSheet(mStyle + "background-color: #eec744; color: white;");
+        setText(QString::number(num));
         break;
     case 2048:
-        pix.load(":/sprites/2048.png");
-        setPixmap(pix);
-        number = 2048;
+        setStyleSheet(mStyle + "background-color: #edca64; color: white;");
+        setText(QString::number(num));
         break;
     }
 }
 
 int Cell::getNumber()
 {
-    return number;
+    return text().toInt();
 }
 
 void Cell::setCoord(Coords *coord)

@@ -18,19 +18,18 @@ struct Coords
     }
 
 public:
-    unsigned short int col;
-    unsigned short int row;
+    int col;
+    int row;
 };
 
 class Cell : public QLabel
 {
     Q_OBJECT
-    unsigned short int number;
     Coords *coord;
 
 public:
     explicit Cell(int row, int col, QWidget *parent = 0);
-    void setNumber(unsigned short int num);
+    void setNumber(int num);
     int getNumber();
     void setCoord(Coords *coord);
 

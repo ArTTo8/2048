@@ -1,21 +1,23 @@
 #include "grid.h"
 #include <QKeyEvent>
 
+const int GRIDSIZE = 4;
+
 Grid::Grid(QWidget *parent) :
     QWidget(parent)
 {
     lay = new QGridLayout(this);
     setLayout(lay);
-    lay->setSpacing(3);
+    lay->setSpacing(4);
     lay->setMargin(2);
     setFocus();
 
-    list.resize(5);
-    for (int i = 0; i < 5; i++)
-        list[i].resize(5);
+    list.resize(GRIDSIZE);
+    for (int i = 0; i < GRIDSIZE; i++)
+        list[i].resize(GRIDSIZE);
 
-    for (int col = 0; col < 5; col++)
-        for (int row = 0; row < 5; row++)
+    for (int col = 0; col < GRIDSIZE; col++)
+        for (int row = 0; row < GRIDSIZE; row++)
         {
             list[row][col] = new Cell(row, col);
             lay->addWidget(list[row][col], row, col);
@@ -30,14 +32,14 @@ void Grid::keyPressEvent(QKeyEvent *event)
     QList<int> notZero;
     switch (event->key()) {
     case Qt::Key_Up:
-        for (int col = 0; col < 5; col++)
+        for (int col = 0; col < GRIDSIZE; col++)
         {
-            for (int row = 0; row < 5; row++)
+            for (int row = 0; row < GRIDSIZE; row++)
                 if (list[row][col]->getNumber() != 0)
                     notZero.append(list[row][col]->getNumber());
             notZero = move(notZero);
 
-            for (int row = 0; row < 5; row++)
+            for (int row = 0; row < GRIDSIZE; row++)
             {
                 if (!notZero.isEmpty())
                     list[row][col]->setNumber(notZero.takeFirst());
@@ -47,14 +49,14 @@ void Grid::keyPressEvent(QKeyEvent *event)
         addRandCell();
         break;
     case Qt::Key_Down:
-        for (int col = 0; col < 5; col++)
+        for (int col = 0; col < GRIDSIZE; col++)
         {
-            for (int row = 4; row >= 0; row--)
+            for (int row = GRIDSIZE - 1; row >= 0; row--)
                 if (list[row][col]->getNumber() != 0)
                     notZero.append(list[row][col]->getNumber());
             notZero = move(notZero);
 
-            for (int row = 4; row >= 0; row--)
+            for (int row = GRIDSIZE - 1; row >= 0; row--)
             {
                 if (!notZero.isEmpty())
                     list[row][col]->setNumber(notZero.takeFirst());
@@ -64,14 +66,14 @@ void Grid::keyPressEvent(QKeyEvent *event)
         addRandCell();
         break;
     case Qt::Key_Left:
-        for (int row = 0; row < 5; row++)
+        for (int row = 0; row < GRIDSIZE; row++)
         {
-            for (int col = 0; col < 5; col++)
+            for (int col = 0; col < GRIDSIZE; col++)
                 if (list[row][col]->getNumber() != 0)
                     notZero.append(list[row][col]->getNumber());
             notZero = move(notZero);
 
-            for (int col = 0; col < 5; col++)
+            for (int col = 0; col < GRIDSIZE; col++)
             {
                 if (!notZero.isEmpty())
                     list[row][col]->setNumber(notZero.takeFirst());
@@ -81,14 +83,14 @@ void Grid::keyPressEvent(QKeyEvent *event)
         addRandCell();
         break;
     case Qt::Key_Right:
-        for (int row = 0; row < 5; row++)
+        for (int row = 0; row < GRIDSIZE; row++)
         {
-            for (int col = 4; col >= 0; col--)
+            for (int col = GRIDSIZE - 1; col >= 0; col--)
                 if (list[row][col]->getNumber() != 0)
                     notZero.append(list[row][col]->getNumber());
             notZero = move(notZero);
 
-            for (int col = 4; col >= 0; col--)
+            for (int col = GRIDSIZE - 1; col >= 0; col--)
             {
                 if (!notZero.isEmpty())
                     list[row][col]->setNumber(notZero.takeFirst());
@@ -111,10 +113,27 @@ QList<int> Grid::move(QList<int> list)
     return list;
 }
 
+//bool Grid::isMovePossible(Direction dir)
+//{
+
+//}
+
+bool Grid::isFull()
+{
+    for (int i = 0; i < GRIDSIZE; i++)
+        for (int j = 0; j < GRIDSIZE; j++)
+            if (list[i][j]->getNumber() == 0)
+                return false;
+    return true;
+}
+
 void Grid::addRandCell()
 {
-    unsigned i = rand()%5;
-    unsigned j = rand()%5;
+    if (isFull())
+        return;
+
+    int i = rand()%GRIDSIZE;
+    int j = rand()%GRIDSIZE;
     if (list[i][j]->getNumber() == 0)
         list[i][j]->setNumber(2);
     else addRandCell();
